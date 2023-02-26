@@ -1,0 +1,156 @@
+---
+title: "Hotel Data Science Project"
+author: "Eric Greiner"
+date: "2022-11-01"
+output: html_document
+---
+
+```{r}
+require(tidyverse)
+```
+
+```{r}
+starwars %>% select(name, height, mass)
+```
+
+```{r}
+starwars%>%group_by(gender)%>%summarise(mean(height, na.rm=TRUE))
+```
+```{r}
+hotels=read_csv('data/hotels.csv')
+```
+
+```{r}
+select(.data=hotels, lead_time)
+```
+
+
+
+
+```{r}
+select(hotels, lead_time)
+```
+
+
+
+```{r}
+select(hotels, hotel, lead_time)
+
+## alternative
+## hotels[,c('hotel','lead_time')]
+```
+
+
+
+```{r}
+selected_columns=select(hotels, hotel, lead_time)
+
+arrange(selected_columns, desc(lead_time))
+
+```
+
+
+```{r}
+arrange(select(hotels, hotel, lead_time), desc(lead_time))
+```
+
+```{r}
+hotels %>% 
+  select(lead_time) %>%  #das
+  arrange(desc(lead_time))
+```
+
+
+
+```{r}
+names(hotels)
+```
+
+
+```{r}
+hotels%>% select(arrival_date_year:adults, -arrival_date_month )
+   
+hotels%>% select(arrival_date_year, arrival_date_week_number:adults )
+```
+
+```{r}
+hotels%>%select(hotel, adults, children, everything())
+```
+
+
+```{r}
+hotels %>%
+  select(adults, children, babies) %>%
+  arrange(babies, desc(adults))
+```
+
+```{r}
+hotels %>%
+  slice(1:10)
+```
+
+
+
+```{r}
+hotels%>%filter(hotel=='City Hotel')
+```
+
+
+
+
+```{r}
+hotels %>% filter(is_canceled==1, children >0)
+```
+
+```{r}
+hotels %>% filter((is_canceled==1 & (children >0 | babies > 0)))
+```
+
+
+
+```{r}
+hotels%>%filter(!is.na(company))
+```
+
+
+
+```{r}
+hotels%>%filter(!(children >0) )
+```
+
+```{r}
+hotels%>%filter(market_segment=='Direct' | market_segment=='Coroporate')
+```
+
+
+```{r}
+hotels%>%filter(market_segment %in% c('Direct','Coroporate'))
+```
+
+```{r}
+selection_criteria= c('Direct','Coroporate')
+
+hotels%>%filter(market_segment %in% selection_criteria)
+```
+
+```{r}
+hotels%>%filter(!(market_segment %in% selection_criteria))
+```
+
+```{r}
+summer_season=c('June','July','August')
+
+hotels%>%filter(is_canceled>0, arrival_date_month %in% summer_season)
+```
+
+```{r}
+hotels%>%filter(adults==0, (children>0|babies>0))
+```
+
+```{r}
+hotels%>%filter(adults+children > 3)
+```
+```{r}
+hotels%>% mutate(beds=adults+children) %>% filter(beds>3)
+```
+

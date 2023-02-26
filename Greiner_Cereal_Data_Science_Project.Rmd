@@ -1,0 +1,86 @@
+---
+title: "Cereal Data Science Project"
+author: "Eric Greiner"
+date: "2022-09-29"
+---
+```{r}
+library('tidyr')
+library('tidyverse')
+
+require('ggplot2')
+require('tidyverse')
+require('tidyr')
+```
+
+## Questions 
+
+### Data Cleaning
+ 
+1. Load the `cereal.csv` data 
+```{r}
+cereals = read_csv('cereals.csv')
+```
+
+```{r}
+glimpse(cereals)
+```
+```{r}
+head(cereals)
+```
+
+## Evaluate the "missingness" of the variables (i.e. what percent of each variable is complete)
+
+```{r}
+install.packages('skimr')
+library('skimr')
+```
+
+
+
+4. Populate the missing values for the variable with most amount of missing data. 
+
+```{r}
+cereals%>%mutate(Sugars =replace_na(Sugars,mean(Sugars,na.rm=T)))%>%
+mutate(Potass=replace_na(Potass,mean(Potass,na.rm=T)))%>%
+mutate(Carbo=replace_na(Carbo,mean(Carbo,na.rm=T)))
+  
+```
+
+### Descriptive Statistics
+ 
+2. Report on the measures of centrality and spread for the calories variable of the data with at least two measures each.  
+
+
+```{r}
+mean(cereals$Calories)
+
+median(cereals$Calories)
+```
+
+3. Plot histograms for the calories and protein distributions of the items. What difference(s) do you see,briefly explain how we should interpret the difference ?  
+
+The calories are skewed more evenly than the protein distribution, where protein average begins to go down after 3.
+
+```{r}
+hist(cereals$Calories)
+hist(cereals$Protein)
+```
+
+
+4. Create a diagram to spot outliers for the protein distribution of the items (extremely high or low in protein content). What type of items do you think they are ? Why ? 
+
+The items with the extremely high protein content are the healthier cereals used to build muscle. 
+
+```{r}
+boxplot(cereals$Protein, main="Protein Distribution Outliers", xlab="Cereals", ylab="Proteins")
+```
+
+
+
+5. We are really interested amount of protein in items per calories. To investigate this, you need to calculate protein per calories by dividing protein amount by the calorie (protein/calories). What is the average protein per calories amount for an item.  
+
+```{r}
+cereals$avg_protein_calories = cereals$Protein/cereals$Calories
+mean(cereals$avg_protein_calories)
+```
+

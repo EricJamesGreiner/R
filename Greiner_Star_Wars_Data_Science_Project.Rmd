@@ -1,0 +1,183 @@
+---
+title: "Star Wars Films"
+author: "Eric Greiner"
+date: "2022-12-24"
+---
+
+```{r}
+#install.packages('tidyverse')
+require(tidyverse)
+```
+
+
+```{r}
+ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
+geom_point() +
+labs(title = "Mass vs. height of Starwars characters",
+x = "Height (cm)", y = "Weight (kg)")
+```
+
+```{r}
+starwars
+```
+
+```{r}
+names(starwars)
+```
+
+```{r}
+ggplot(data=starwars, aes(x=height,y=mass)) + 
+            geom_point()   + 
+            labs(title='Starwars Graph',x='height in (cm)', y='weight in (kg)')
+```
+```{r}
+mtcars
+```
+
+
+```{r}
+glimpse(starwars)
+```
+
+```{r}
+#str(starwars)
+?ggplot
+```
+
+Aesthetics
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass, color=gender))+
+            geom_point()
+            #scale_color_brewer(palette = "PuOr")
+```
+
+
+```{r}
+names(starwars)
+```
+
+
+```{r}
+ggplot(data = starwars,
+        mapping = aes(x = height, 
+                      y = mass, 
+                      color=gender, 
+                      ))+
+            geom_point(aes(size=birth_year))
+```
+
+
+
+
+```{r}
+ggplot(data = starwars,
+        mapping = aes(x = height, 
+                      y = mass, 
+                      size=birth_year
+                      ))+
+            geom_point()
+```
+
+
+```{r}
+ggplot(data = starwars,
+        mapping = aes(x = height, 
+                      y = mass, 
+                      alpha=birth_year
+                      ))+
+            geom_point()
+```
+
+
+
+
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass, color=gender))+
+            geom_point()
+```
+
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass, color=birth_year))+
+            geom_point()
+```
+
+
+```{r}
+
+```
+
+
+
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass, shape=gender))+
+            geom_point(size=5)
+```
+
+
+
+```{r}
+mtcars
+```
+
+
+```{r}
+ggplot(data=mtcars, aes(x=hp, y=mpg, color=cyl))+ geom_point()
+```
+
+```{r}
+mtcars2=mtcars
+
+mtcars2$cyl=as.character(mtcars2$cyl)
+
+mtcars2
+ggplot(data=mtcars2, aes(x=hp, y=mpg, color=cyl))+ geom_point()
+```
+
+```{r}
+ggplot(data=mtcars, aes(x=hp, y=mpg, color=as.character(cyl)))+ geom_point()
+```
+
+```{r}
+ggplot(data=mtcars, aes(x=hp, y=mpg, color=as.factor(cyl)))+ geom_point()
+```
+
+```{r}
+glimpse(mtcars)
+```
+```{r}
+
+ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
+                      facet_grid(.~ gender) + 
+                      geom_point()
+```
+```{r}
+starwars
+```
+
+```{r}
+ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
+                      facet_grid( sex ~ gender) + 
+                      geom_point()
+```
+
+```{r}
+ggplot(data = starwars, mapping = aes(x = height, y = mass, color=gender)) +
+                      facet_grid( . ~ gender + sex) + 
+                      geom_point()
+```
+
+```{r}
+ggplot(data = starwars, mapping = aes(x = height, y = mass, color=gender)) +
+                      facet_grid(sex ~ gender ) + 
+                      geom_point()
+```
+
+
+```{r}
+library(ggthemes)
+ggplot(data = starwars, mapping = aes(x = height, y = mass, color=gender)) +
+                      facet_wrap(sex ~ gender ) + 
+                      geom_point()+  theme_calc()+ scale_colour_calc()
+
+```
+

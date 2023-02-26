@@ -1,0 +1,166 @@
+---
+title: "Plastic Waste Data Science Project"
+author: "Eric Greiner"
+date: "2022-10-12"
+---
+
+```{r}
+#install.packages('tidyverse')
+require(tidyverse)
+```
+
+
+```{r}
+ggplot(data = plastic.waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.2) + facet_wrap(~continent)
+```
+1. When comparing the continents we see that South America has the least plastic waste per capita while North America and the European countries have the most. 
+```{r}
+plastic.waste %>%
+  filter(plastic_waste_per_cap > 3.5)
+```
+
+```{r}
+ggplot(data = plastic.waste, aes(x = plastic_waste_per_cap)) +
+  geom_density()
+```
+
+```{r}
+ggplot(data = plastic.waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent)) +
+  geom_density()
+
+```
+```{r}
+ggplot(data = plastic.waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density()
+```
+
+
+```{r}
+ggplot(data = plastic.waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.2)
+```
+1. Changing the alpha to 0.2 allows you to visualize the chart much better than an alpha at 0.7. 
+2. When using color and fill, they must be defined with the ggplot funciton while alpha is defined as a characteristic in the geom trait as a geom function. 
+```{r}
+ggplot(data = plastic.waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_boxplot()
+
+ggplot(data = plastic.waste,
+       mapping = aes(x = continent,
+                     y = plastic_waste_per_cap)) +
+  geom_violin()
+```
+
+1. Both boxplots and violin plots can help show your data, but in different ways. Boxplots have the ability to show the five-number summary of your data, but they do not use width to show certain variables, while violin plots features can show different variables through width, but they cannot show the five-number summaries. 
+```{r}
+ggplot(data = plastic.waste, 
+       mapping = aes(x = plastic_waste_per_cap,
+                     y = mismanaged_plastic_waste_per_cap)) +
+  geom_point()
+
+```
+
+1. After looking at the scatterplot, you can see that as the plastic waste per capita gets larger the mismanaged plastic per capita grows. 
+```{r}
+ggplot(data = plastic.waste, 
+       mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap,
+                     color = continent)) +
+  geom_point()
+```
+
+After introducing color to the scatterplot, we cannot see much distinction between the continents because the clusters are to close to eachother to notice much difference in trends. We do get to see that North America is the outlier with 3.6 plastic waste per capita. 
+```{r}
+
+```
+
+
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+
+```
+

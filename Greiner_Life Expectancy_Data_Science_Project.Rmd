@@ -1,0 +1,177 @@
+---
+title: "Life Expectancy vs. Developed and Developing Countries"
+author: "Eric Greiner"
+date: "2022-12-09"
+output: html_document
+---
+
+```{r}
+library('tidyr')
+library('tidyverse')
+library('dplyr')
+library('ggmap')
+library('httr')
+library('jsonlite')
+library('gapminder')
+
+life_exp = read_csv('Life_Expectancy_Data.csv')
+
+## This removes certain unneeded columns from our dataset.
+life_exp = life_exp %>% select(-one_of('Hepatitis B','Diphtheria','thinness 1-19 years','thinness 5-9 years','Income composition of resources'))
+# Eric Greiner
+```
+
+```{r}
+# This changes the column names in dataset
+# Eric Greiner
+
+colnames(life_exp) = c('country', 'year', 'status', 'life_expectancy','adult_mortality', 'infant_deaths','alcohol','percentage_expenditure','measles','bmi','death_under_five','polio', 'total_expenditure','hiv_aids','gdp','population','thinness 1-19 years','schooling')
+
+life_exp = life_exp %>% 
+  select(-one_of('thinness 1-19 years'))
+
+# This removes unwanted elements.
+# Eric Greiner
+
+life_exp[complete.cases(life_exp),]
+life_exp %>%
+  drop_na()
+
+# This removes outliers in data.
+# Eric Greiner
+
+life_exp = filter(life_exp, infant_deaths < 1001)
+life_exp = filter(life_exp, measles < 1001)
+life_exp = filter(life_exp, death_under_five < 1001)
+
+```
+
+```{r}
+# Question 1: Do people in developed countries have a longer life expectancy than people in developing countries? How many years is the gap that separates the two? 
+
+# This graph shows that life expectancy is extended in developed nations compared to developing nations, there is approximately a ten year gap between the two.
+# Eric Greiner
+
+ggplot(life_exp, aes(x=year, 
+                     y=life_expectancy,
+                     color=status)) +
+  geom_point() + 
+  xlab('Year') +
+  ylab("Life Expectancy") +
+  labs(title='Developing vs. Developed Countries') +
+  geom_smooth(method = 'lm')
+```
+```{r}
+# Question 2: Does life expectancy in developed and developing countries increase or decrease while the GDP increases?
+
+# This graph shows that life expectancy increases with an increase of GDP in both developing and developed countries.
+# Eric Greiner
+
+ggplot(life_exp,aes(gdp,life_expectancy,color=status)) + geom_point()+ labs(x = 'GDP',
+     y='Life Expectancy',
+     title = 'Does Life exptectancy increase due to GDP?') +
+  theme_minimal()
+```
+
+```{r}
+# Question 3: Did the mortality rate increased or decreased in the United States from the years 2000-2015?
+
+# This graph shows the mortality rate has gone down in the US from 2000-2015, and dropped by a great deal after 2006.
+# Eric Greiner
+
+life_exp_us = life_exp %>%
+  filter(country %in% c('United States of America')) %>%
+  filter()
+
+ggplot(life_exp_us, aes(x=year, y=adult_mortality)) +
+  geom_col() +
+  xlab("Year") +
+  ylab("Adult Mortality") +
+  labs(title='Is Mortality Decreasing In The US?')
+```
+
+
+```{r}
+#Question 4: Will a linear regression model show that the longer you stay in school, the longer you can expect to live?
+
+# The linear regression model shows life expectancy in countries increases with more schooling, compared with GDP. We've found that a person with a university degree can expect to live approximately a decade longer than a person with a high school diploma. 
+# Eric Greiner
+
+model = lm(life_expectancy ~ schooling, data = life_exp)
+summary(model)
+
+ggplot(life_exp, aes(x=schooling, y=life_expectancy, color=gdp)) +
+  geom_point()  +
+  xlab("Years of Schooling") +
+  ylab("Life Expectancy") +
+  labs(title='Life Expectancy Compared To Schooling') +
+  geom_smooth(method = 'lm')
+```
+
+
+```{r}
+# Question 5: With a sample size of 50 random developing countries, how has average life expectancy faired from 2000-2015 in developing countries?
+
+# This line chart shows that the life expectancy of developing countries was on a downward trend prior to 2005, and then began an uptrend during the following decade.
+# Eric Greiner
+
+sample_countries = sample_n(life_exp, 50)
+
+sample_countries = select(sample_countries, country, year, status, life_expectancy)
+sample_countries = filter(sample_countries, status %in% 'Developing')
+sample_countries = group_by(life_exp, year)
+sample_countries = summarise(sample_countries, avg_life_expectancy = mean(life_expectancy))
+
+ggplot(data = sample_countries, aes(x=year, y=avg_life_expectancy)) +
+  geom_line() +
+  xlab('Year') +
+  ylab('Average Life Expectancy') +
+  labs(title='Life Expectancy of Developing Countries')
+```
+
+
+```{r}
+set.seed(123)
+# Question 6: In the United States, does alcohol consumption increase or decrease the adult mortality rate?
+
+# This graph shows the linear regression model of adult mortality in the United States compared to average alcohol consumption.As alcohol consumption goes up, adult mortality goes up with it.
+# Eric Greiner
+
+life_exp_us = life_exp %>%
+  filter(country %in% c('United States of America')) %>%
+  filter()
+
+model = lm(life_expectancy ~ alcohol, data=life_exp_us)
+summary(model)
+
+ggplot(life_exp_us, aes(x=alcohol, y=life_expectancy)) +
+  geom_point() +
+  xlab("Alcohol Consumption (avg)") +
+  ylab("Adult Mortality") +
+  labs(title='Alcohol Affects on Adult Mortality in US') +
+  geom_smooth(method='lm', se=FALSE)
+
+```
+
+```{r}
+#Question 7: From 2000-20015, have AIDs deaths increased or decreased in the United States, compared to the adult mortality rate?
+
+# From 2000-2015, adult mortality has decreased when it comes to the AIDS virus.This means less people are dying from AIDS in the United States.
+# Eric Greiner
+
+life_exp_us = life_exp %>%
+  filter(country %in% c('United States of America')) %>%
+  filter()
+
+ggplot(life_exp_us, aes(x=year,
+                        y=adult_mortality,
+                        colour=hiv_aids)) +
+geom_point() +
+geom_smooth(method = lm,
+            se = F) +
+labs(x = 'Year',
+     y='Adult Mortality',
+     title = 'Adult Mortality vs. AIDS in US') +
+  theme_minimal()
+
+```

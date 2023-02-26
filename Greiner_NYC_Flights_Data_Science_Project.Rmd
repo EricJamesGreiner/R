@@ -1,0 +1,104 @@
+---
+title: "NYC Flights Data Science Project"
+author: "Eric Greiner"
+date: "2022-08-09"
+output: html_document
+---
+
+
+### Loading data 
+```{r}
+library(tidyverse)
+
+```
+
+```{r}
+nycflights=read_csv('data/nycflights.csv')
+```
+
+### Answers
+
+Q1 
+```{r}
+glimpse(nycflights)
+head(nycflights)
+```
+
+Q2 
+```{r}
+#names(nycflights)
+ggplot(data=nycflights, aes(x=dep_delay))+geom_histogram()
+
+```
+Q3 
+```{r}
+laxflights=nycflights%>%filter(dest=='LAX')
+ggplot(data=laxflights, aes(x=dep_delay))+geom_histogram()
+```
+
+Q4
+```{r}
+nycflights%>%summarise(mean_dd=mean(dep_delay), median_dd=median(dep_delay), n=n())
+```
+
+Q5 
+```{r}
+sfo_feb_flights=nycflights%>% filter( dest=='SFO' & month== 2)
+sfo_feb_flights
+```
+
+Q6 
+
+```{r}
+sfo_feb_flights%>%summarise(median(arr_delay), IQR(arr_delay))
+```
+
+```{r}
+sfo_feb_flights%>%group_by(origin)%>%summarise(median(arr_delay), IQR(arr_delay))
+
+```
+
+
+
+Q7
+```{r}
+nycflights%>%group_by(month)%>%
+              summarise(mean_dd=mean(dep_delay))%>%
+              arrange(desc(mean_dd))
+```
+
+Q8
+```{r}
+nycflights%>%filter(origin=='NYC')
+```
+
+
+Q8
+```{r}
+=nycflights%>%mutate(avg_speed=distance/(air_time/60))
+```
+
+
+Q9
+```{r}
+ggplot(data=speed, aes(x=avg_speed, y=distance))+geom_point()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
